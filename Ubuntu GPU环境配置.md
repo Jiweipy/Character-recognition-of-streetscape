@@ -72,7 +72,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 
 - 创建虚拟环境
 
-> $ conda creat -n {tf-gpu} python=3.6
+> $ conda create -n {tf-gpu} python=3.6
 
 - 添加源
 
