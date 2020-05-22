@@ -43,7 +43,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 
 - 按照型号安装驱动（一般按照推荐进行安装）
 
-> $ sudo apt-get install nvidia-430
+> $ sudo apt-get install nvidia-{430}
 
 - 安装成功后，重启
 
@@ -68,7 +68,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 
 - 安装完成后<u>**重启终端**</u>，输入Python即为Anaconda里的Python版本
 
-## 1.3 安装tensorflow-gpu
+## 1.3 安装tensorflow[pytorch]-gpu
 
 - 创建虚拟环境
 
@@ -79,8 +79,6 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 > $ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
 >
 > $ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
->
-> $ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/  (安装pytorch时候用）
 >
 > $ conda config --set show_channel_urls yes
 
@@ -104,22 +102,23 @@ import torch
 print(torch.cuda.is_available())
 # 测试tensorflow-gpu
 import tensorflow
-print(tensorflow.is_gpu_available())
+print(tensorflow.test.is_gpu_available())
 """若返回为True,则证明安装成功"""
 ```
 
 ## 样例-Pytorch
 
-> [**MNIST测试**](https://github.com/dragen1860/Deep-Learning-with-PyTorch-Tutorials/blob/master/lesson29-MNIST测试/main.py)
+- 使用MNIST代码测试
 
-## 样例-tensorflow
+> [**MNIST测试-GPU**](https://github.com/dragen1860/Deep-Learning-with-PyTorch-Tutorials/blob/master/lesson29-MNIST测试/main.py)
 
-> 
+- 新打开一个终端，查看GPU使用状态
+
+> $ watch -n 1 nvidia-smi
 
 
+## 样例-TensorFlow
 
+> [**MNIST测试-GPU**](https://github.com/dragen1860/TensorFlow-2.x-Tutorials/blob/master/03-Play-with-MNIST/main.py)
 
-
-y
-
-y
+> $ watch -n 1 nvidia-smi
