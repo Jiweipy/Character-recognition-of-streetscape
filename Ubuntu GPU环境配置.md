@@ -8,7 +8,7 @@
 - tf版本：tensorflow==2.0.0；torch版本：pytorch==1.5
 
 ## 1.1安装系统
-##1.2 Nvidia驱动安装
+## 1.2 Nvidia驱动安装
 
 - 更改源
 
