@@ -21,7 +21,7 @@
 - OpenCV-Python库的应用
 - pytorchd加载数据
 
-### 2.1 数据扩增
+### 2.2 数据扩增
 
 **数据扩增目的：**扩展样本空间、缓解模型过拟合
 
@@ -38,7 +38,7 @@ img1 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 img1 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ```
 
-### 2.2 torchvision
+### 2.3 torchvision
 
 ```python
 transforms.CenterCrop       对图片中心进行裁剪      
@@ -55,7 +55,7 @@ transforms.RandomVerticalFlip        随机垂直翻转
 
 > 字符的话需要注意旋转问题
 
-### 2.3 Pytorch读取数据  
+### 2.4 Pytorch读取数据  
 
 > Pytorch中数据是通过Dataset进行封装，并通过DataLoder进行并行读取
 
