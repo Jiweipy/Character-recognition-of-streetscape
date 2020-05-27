@@ -126,3 +126,117 @@ for data in train_loader:
 
 > - num_workers=10 这个在ubuntu上可以运行，但是在我的mac上就得调成0，不知道为啥
 
+## day 3
+
+### 3.1 学习目标
+
+- ImageNet预训练模型
+- CNN模型
+
+### 3.2 ImageNet18
+
+复用ImageNet18，构建模型
+
+```python
+class SVHN_Model2(nn.Module):
+    def __init__(self):
+        super(SVHN_Model1, self).__init__()
+                
+        model_conv = models.resnet18(pretrained=True)
+        model_conv.avgpool = nn.AdaptiveAvgPool2d(1)
+        model_conv = nn.Sequential(*list(model_conv.children())[:-1])
+        self.cnn = model_conv
+        
+        self.fc1 = nn.Linear(512, 11)
+        self.fc2 = nn.Linear(512, 11)
+        self.fc3 = nn.Linear(512, 11)
+        self.fc4 = nn.Linear(512, 11)
+        self.fc5 = nn.Linear(512, 11)
+    
+    def forward(self, img):        
+        feat = self.cnn(img)
+        # print(feat.shape)
+        feat = feat.view(feat.shape[0], -1)
+        c1 = self.fc1(feat)
+        c2 = self.fc2(feat)
+        c3 = self.fc3(feat)
+        c4 = self.fc4(feat)
+        c5 = self.fc5(feat)
+        return c1, c2, c3, c4, c5
+```
+
+> 注：ImageNet18()输入的图片size为(224,224)，但不知到这里为什么用(120,60)
+
+跑了10个epoch，比baseline多使用了一些数据增强的方法，验证集上的结果比提交的成绩要高7%
+
+```python
+Epoch: 0, Train loss: 4.0019889717102055 	 Val loss: 3.6224123163223267
+Val Acc 0.3282
+Epoch: 1, Train loss: 2.5506652064323427 	 Val loss: 3.1023997325897215
+Val Acc 0.4089
+Epoch: 2, Train loss: 2.1469370821317035 	 Val loss: 2.946799901485443
+Val Acc 0.4513
+Epoch: 3, Train loss: 1.9218358896573384 	 Val loss: 2.760008645534515
+Val Acc 0.4757
+Epoch: 4, Train loss: 1.7602460599740346 	 Val loss: 2.6176762866973875
+Val Acc 0.4987
+Epoch: 5, Train loss: 1.6631318992773692 	 Val loss: 2.627127679824829
+Val Acc 0.5059
+Epoch: 6, Train loss: 1.5585278493563335 	 Val loss: 2.7410025124549864
+Val Acc 0.5034
+Epoch: 7, Train loss: 1.4755264279842377 	 Val loss: 2.6916711211204527
+Val Acc 0.5079
+Epoch: 8, Train loss: 1.4116250272591908 	 Val loss: 2.4272326512336733
+Val Acc 0.5481
+Epoch: 9, Train loss: 1.3362294898033142 	 Val loss: 2.4245066576004026
+Val Acc 0.5441
+```
+
+
+
+
+### 3.3 CNN模型
+
+使用CNN模型，这里用了两次卷积，两次池化
+
+```python
+import torch
+torch.manual_seed(0)
+torch.backends.cudnn.deterministic = False
+torch.backends.cudnn.benchmark = True
+
+# 定义模型
+class SVHN_Model1(nn.Module):
+    def __init__(self):
+        super(SVHN_Model1, self).__init__()
+        # CNN提取特征模块
+        self.cnn = nn.Sequential(
+            nn.Conv2d(3, 16, kernel_size=(3, 3), stride=(2, 2)),
+            nn.ReLU(),  
+            nn.MaxPool2d(2),
+            nn.Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2)),
+            nn.ReLU(), 
+            nn.MaxPool2d(2),
+        )
+        # 
+        self.fc1 = nn.Linear(32*3*7, 11)
+        self.fc2 = nn.Linear(32*3*7, 11)
+        self.fc3 = nn.Linear(32*3*7, 11)
+        self.fc4 = nn.Linear(32*3*7, 11)
+        self.fc5 = nn.Linear(32*3*7, 11)
+        self.fc6 = nn.Linear(32*3*7, 11)
+    
+    def forward(self, img):        
+        feat = self.cnn(img)
+        feat = feat.view(feat.shape[0], -1)
+        c1 = self.fc1(feat)
+        c2 = self.fc2(feat)
+        c3 = self.fc3(feat)
+        c4 = self.fc4(feat)
+        c5 = self.fc5(feat)
+        c6 = self.fc6(feat)
+        return c1, c2, c3, c4, c5, c6
+```
+
+> 目前使用这个CNN模型，训练结果也太低了，应该是网络的问题，正在审查中...
+
